@@ -1,27 +1,38 @@
-apply plugin: 'java'
-
-sourceCompatibility = 1.6
-
-jar.baseName = 'activeandroid'
-archivesBaseName = 'activeandroid'
-
-sourceSets {
-	main {
-		java {
-			srcDir 'src'
-		}
-	}
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.9.+'
+    }
 }
 
-dependencies {
-	compile fileTree(dir: 'libs', include: '*.jar')
-}
+apply plugin: 'android-library'
 
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
+android {
+    compileSdkVersion 19
+    buildToolsVersion = 19
 
-artifacts {
-    archives sourcesJar
+    sourceSets {
+        defaultConfig {
+            testPackageName 'com.activeandroid.test'
+        }
+
+        main {
+            assets.srcDirs       = ['assets']
+            res.srcDirs          = ['res']
+            aidl.srcDirs         = ['src']
+            resources.srcDirs    = ['src']
+            renderscript.srcDirs = ['src']
+            java.srcDirs         = ['src']
+            manifest.srcFile 'AndroidManifest.xml'
+
+        }
+
+        instrumentTest.setRoot('tests')
+        instrumentTest.java.srcDirs = ['tests/src']
+    }
+    dependencies {
+        compile fileTree(dir: 'libs', include: '*.jar')
+    }
 }
